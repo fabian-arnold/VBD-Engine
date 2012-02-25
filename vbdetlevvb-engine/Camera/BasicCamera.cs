@@ -1,4 +1,7 @@
-﻿using System;
+﻿/*
+ * (c)by Fabian Arnold
+ */
+using System;
 using System.Collections.Generic;
 using System.Text;
 using OpenTK;
