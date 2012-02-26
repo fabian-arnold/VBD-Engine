@@ -5,7 +5,7 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using vbdetlevvb_engine.Rendering.Mesh;
 using vbdetlevvb_engine.Rendering.VBO;
-using vbdetlevvb_engine.Camera;
+using vbdetlevvb_engine.Rendering.Camera;
 
 
 namespace vbdetlevvb_engine.Rendering.Mesh

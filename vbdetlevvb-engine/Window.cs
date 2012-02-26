@@ -13,7 +13,7 @@ using OpenTK;
 using OpenTK.Platform;
 using OpenTK.Graphics.OpenGL;
 using GL = OpenTK.Graphics.OpenGL.GL;
-using vbdetlevvb_engine.Camera;
+using vbdetlevvb_engine.Rendering.Camera;
 using vbdetlevvb_engine.Rendering.VBO;
 using vbdetlevvb_engine.Rendering.Mesh;
 using vbdetlevvb_engine.Rendering.Terrain;
@@ -27,7 +27,7 @@ namespace vbdetlevvb_engine
     public class Window : GameWindow
     {
         private bool wireframe = false;
-        public Camera.Camera camera;
+        public Rendering.Camera.Camera camera;
 
 
         //Shape testquad;
@@ -41,6 +41,8 @@ namespace vbdetlevvb_engine
             logger = new Logger(this);
             camera = new BasicCamera(this);
             terrain = new Terrain(this);
+            
+            
         }
 
         protected override void OnLoad(EventArgs e)

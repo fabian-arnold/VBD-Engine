@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using OpenTK;
-using vbdetlevvb_engine.Camera;
+using vbdetlevvb_engine.Rendering.Camera;
 using vbdetlevvb_engine.Rendering.Mesh;
 using vbdetlevvb_engine.Rendering.Resources;
 using vbdetlevvb_engine.Rendering.VBO;
@@ -9,6 +9,8 @@ using ClipperLib;
 
 using Polygon = System.Collections.Generic.List<ClipperLib.IntPoint>;
 using Polygons = System.Collections.Generic.List<System.Collections.Generic.List<ClipperLib.IntPoint>>;
+using GeometryUtility;
+using PolygonCuttingEar;
 
 namespace vbdetlevvb_engine.Rendering.Terrain
 {
@@ -26,6 +28,7 @@ namespace vbdetlevvb_engine.Rendering.Terrain
             public static byte Width = 5;
             public static byte Height = 5;
             Texture dirt;
+            Vector2[][] brushtriangles;
         #endregion
 
         #region LoadUp
@@ -74,118 +77,119 @@ namespace vbdetlevvb_engine.Rendering.Terrain
         }
     #endregion
 
-        Vector2[][] brushtriangles;
-        private void GenerateAndLoadBrush()
-        {
-            float brushsize=2f;
-            brushtriangles = new Vector2[36][];
-            short count = 0;
-            for (int alpha = 0; alpha < 360; alpha += 10)
+        #region Generate
+            private void GenerateAndLoadBrush()
             {
-                brushtriangles[count] = new Vector2[3];
-
-                brushtriangles[count][0] = Vector2.Zero;
-                brushtriangles[count][1] = new Vector2((float)Math.Sin((alpha) * Math.PI / 180.0) * brushsize, (float)Math.Cos(alpha * Math.PI / 180.0) * brushsize);
-                brushtriangles[count][2] = new Vector2((float)Math.Sin((alpha + 10) * Math.PI / 180.0) * brushsize, (float)Math.Cos((alpha + 10) * Math.PI / 180.0) * brushsize);
-                count++;
-            }
-           /* brushtriangles[0] = new Vector2[3];
-            brushtriangles[0][0] = new Vector2(0, 0);
-            brushtriangles[0][1] = new Vector2(0, 1 );
-            brushtriangles[0][2] = new Vector2(1, 0);*/
-            brush.Load(brushtriangles);
-        }
-
-        private void GenerateTerrain()
-        {
-            int c2 = 0;
-            for (int x = 0; x < Width; x++)
-            {
-                for (int y = 0; y < Height; y++)
+                float brushsize=2f;
+                brushtriangles = new Vector2[36][];
+                short count = 0;
+                for (int alpha = 0; alpha < 360; alpha += 10)
                 {
+                    brushtriangles[count] = new Vector2[3];
+
+                    brushtriangles[count][0] = Vector2.Zero;
+                    brushtriangles[count][1] = new Vector2((float)Math.Sin((alpha) * Math.PI / 180.0) * brushsize, (float)Math.Cos(alpha * Math.PI / 180.0) * brushsize);
+                    brushtriangles[count][2] = new Vector2((float)Math.Sin((alpha + 10) * Math.PI / 180.0) * brushsize, (float)Math.Cos((alpha + 10) * Math.PI / 180.0) * brushsize);
+                    count++;
+                }
+               /* brushtriangles[0] = new Vector2[3];
+                brushtriangles[0][0] = new Vector2(0, 0);
+                brushtriangles[0][1] = new Vector2(0, 1 );
+                brushtriangles[0][2] = new Vector2(1, 0);*/
+                brush.Load(brushtriangles);
+            }
+
+            private void GenerateTerrain()
+            {
+                int c2 = 0;
+                for (int x = 0; x < Width; x++)
+                {
+                    for (int y = 0; y < Height; y++)
+                    {
 
 
-                    triangles[c2] = new Vector2[3];
-                    triangles[c2][0] = new Vector2(x, y);
-                    triangles[c2][1] = new Vector2(x + 1, y);
-                    triangles[c2][2] = new Vector2(x + 1, y + 1);
-                    c2++;
-                    triangles[c2] = new Vector2[3];
-                    triangles[c2][0] = new Vector2(x, y);
-                    triangles[c2][1] = new Vector2(x, y + 1);
-                    triangles[c2][2] = new Vector2(x + 1, y + 1);
-                    c2++;
+                        triangles[c2] = new Vector2[3];
+                        triangles[c2][0] = new Vector2(x, y);
+                        triangles[c2][1] = new Vector2(x + 1, y);
+                        triangles[c2][2] = new Vector2(x + 1, y + 1);
+                        c2++;
+                        triangles[c2] = new Vector2[3];
+                        triangles[c2][0] = new Vector2(x, y);
+                        triangles[c2][1] = new Vector2(x, y + 1);
+                        triangles[c2][2] = new Vector2(x + 1, y + 1);
+                        c2++;
 
 
 
+                    }
                 }
             }
-        }
 
-        private void FillAndBindBuffers()
-        {
-            terrain.BufferVertices<VertexPosition>(ref vertices);
-            terrain.BufferTexCoords<TextureCoords>(ref texcoords); 
+            private void FillAndBindBuffers()
+            {
+                terrain.BufferVertices<VertexPosition>(ref vertices);
+                terrain.BufferTexCoords<TextureCoords>(ref texcoords); 
             
-        }
+            }
 
  
-        public void GenerateThread()
-        {
-            System.DateTime renderbegin = System.DateTime.Now;
-            vertices = new VertexPosition[triangles.Length * 6];
-            texcoords = new TextureCoords[triangles.Length * 6];
-           
-            for (int i = 0; i < ((triangles.Length*3)-3); )
+            public void GenerateThread()
             {
-                int c = (int)(i / 3);
-                vertices[i] = new VertexPosition(triangles[c][0]);
-                texcoords[i] = new TextureCoords(new Vector2(0,0));
-                i++;
-                vertices[i] = new VertexPosition(triangles[c][1]);
-                texcoords[i] = new TextureCoords(new Vector2(1, 0));
-                i++;
-                vertices[i] = new VertexPosition(triangles[c][2]);
-                texcoords[i] = new TextureCoords(new Vector2(1, 1));
-                i++;
-                c++;
-                vertices[ i ] = new VertexPosition( triangles[c][0] );
-                texcoords[i] = new TextureCoords(new Vector2(0, 0));
-                i++;
-                vertices[ i ] = new VertexPosition( triangles[c][1]);
-                texcoords[i] = new TextureCoords(new Vector2(0, 1));
-                i++;
-                vertices[i] = new VertexPosition(triangles[c][2]);
-                texcoords[i] = new TextureCoords(new Vector2(1, 1));
-                i++;
+                System.DateTime renderbegin = System.DateTime.Now;
+                vertices = new VertexPosition[triangles.Length * 6];
+                texcoords = new TextureCoords[triangles.Length * 6];
+           
+                for (int i = 0; i < ((triangles.Length*3)-3); )
+                {
+                    int c = (int)(i / 3);
+                    vertices[i] = new VertexPosition(triangles[c][0]);
+                    texcoords[i] = new TextureCoords(new Vector2(0,0));
+                    i++;
+                    vertices[i] = new VertexPosition(triangles[c][1]);
+                    texcoords[i] = new TextureCoords(new Vector2(1, 0));
+                    i++;
+                    vertices[i] = new VertexPosition(triangles[c][2]);
+                    texcoords[i] = new TextureCoords(new Vector2(1, 1));
+                    i++;
+                    c++;
+                    vertices[ i ] = new VertexPosition( triangles[c][0] );
+                    texcoords[i] = new TextureCoords(new Vector2(0, 0));
+                    i++;
+                    vertices[ i ] = new VertexPosition( triangles[c][1]);
+                    texcoords[i] = new TextureCoords(new Vector2(0, 1));
+                    i++;
+                    vertices[i] = new VertexPosition(triangles[c][2]);
+                    texcoords[i] = new TextureCoords(new Vector2(1, 1));
+                    i++;
 
                 
-            }
+                }
 
-            TimeSpan delta = System.DateTime.Now - renderbegin;
-            window.logger.Log("Terrain","Buffergenerationtime: " + delta.Milliseconds);
+                TimeSpan delta = System.DateTime.Now - renderbegin;
+                window.logger.Log("Terrain","Buffergenerationtime: " + delta.Milliseconds);
 
             
-        }
-
-        public void Draw()
-        {
-            UpdateMesh();
-            FillAndBindBuffers();
-            dirt.bind();
-            terrain.Draw();
-            brush.Draw();   
-        }
-
-        public void UpdateMesh()
-        {
-            if( delte )
-            {
-                SubtractSphere();
-                GenerateThread();
             }
-            //Console.WriteLine( trianglesnew.Count );
-        }
+
+            public void Draw()
+            {
+                UpdateMesh();
+                FillAndBindBuffers();
+                dirt.bind();
+                terrain.Draw();
+                brush.Draw();   
+            }
+
+            public void UpdateMesh()
+            {
+                if( delte )
+                {
+                    SubtractSphere();
+                    GenerateThread();
+                }
+                //Console.WriteLine( trianglesnew.Count );
+            }
+        #endregion
 
         #region MeshSubtraction()
 
@@ -234,13 +238,60 @@ namespace vbdetlevvb_engine.Rendering.Terrain
                         
                         for (int f = 0; f < solution.Count; f++)
                         {
-                            Vector2[] tmp = new Vector2[3];
+                            if (solution[0].Count > 3)
+                            {
+                                int nVertices = solution[f].Count;
+                                if (nVertices <= 0)
+                                    return;
 
-                            tmp[0] = new Vector2(solution[f][0].X / 1000f, solution[f][0].Y / 1000f);
-                            tmp[1] = new Vector2(solution[f][1].X / 1000f, solution[f][1].Y / 1000f);
-                            tmp[2] = new Vector2(solution[f][2].X / 1000f, solution[f][2].Y / 1000f);
-                            trianglesnew.Add(tmp);
-                            Console.WriteLine(solution[0].Count);
+                                List<CPoint2D> vertices = new List<CPoint2D>(nVertices);
+                                
+                                for (int e = 0; e < nVertices; e++)
+                                {
+                                    vertices.Add(new CPoint2D(solution[f][e].X/1000f, solution[f][e].Y/1000f));
+                                    
+                                }
+                                ChangeDoubleItems(ref vertices);
+                                Console.WriteLine();
+                                CPolygonShape cutPolygon = new CPolygonShape(vertices.ToArray());
+                                try
+                                {
+                                    Console.WriteLine("Start clipping: "+nVertices);
+                                    cutPolygon.CutEar();
+                                    Console.WriteLine("Finisched clipping");
+                                }
+                                catch {
+                                    Console.Beep();
+                                    Console.WriteLine("Error while converting polygon to triangle");
+                                }
+
+                                if (cutPolygon.NumberOfPolygons > 1)
+                                    Console.WriteLine(cutPolygon.NumberOfPolygons);
+
+
+                                for (int s = 0; s < cutPolygon.NumberOfPolygons; s++)
+                                {
+
+                                    Vector2[] tempArray = new Vector2[3];
+
+                                    for (int j = 0; j < 3; j++)
+                                    {
+                                        tempArray[j].X = (float)cutPolygon.Polygons(s)[j].X;
+                                        tempArray[j].Y = (float)cutPolygon.Polygons(s)[j].Y;
+                                    }
+
+                                    trianglesnew.Add(tempArray);
+
+                                }
+                            }else{
+
+                                Vector2[] tmp = new Vector2[3];
+                                tmp[0] = new Vector2(solution[f][0].X / 1000f, solution[f][0].Y / 1000f);
+                                tmp[1] = new Vector2(solution[f][1].X / 1000f, solution[f][1].Y / 1000f);
+                                tmp[2] = new Vector2(solution[f][2].X / 1000f, solution[f][2].Y / 1000f);
+                                trianglesnew.Add(tmp);
+                            }
+                                
                         }
                     }
                 }
@@ -249,7 +300,27 @@ namespace vbdetlevvb_engine.Rendering.Terrain
             triangles = trianglesnew.ToArray();
             
         }
+        private static List<CPoint2D> ChangeDoubleItems(ref List<CPoint2D> list)
+            {
+                List<CPoint2D> newList = new List<CPoint2D>();
+                Dictionary<CPoint2D, string> keyList = new Dictionary<CPoint2D, string>();
+               // newList.Add(list[0]);
+                foreach (CPoint2D item in list)
+                {
+                    foreach (CPoint2D itemnew in newList)
+                    {
+                        Console.WriteLine("testing");
+                        if((itemnew.X == item.X)&(item.Y==itemnew.Y)&(item!=itemnew)){
+                            item.Y += .001f;
+                            item.X += .001f;
+                            Console.WriteLine("test");
+                        }
+                    }
+                    newList.Add(item);
+                }
 
+                return newList;
+            }
 
             private static List<T> RemoveDoubleItems<T>(ref List<T> list)
             {
@@ -263,10 +334,12 @@ namespace vbdetlevvb_engine.Rendering.Terrain
                         keyList.Add(item, string.Empty);
                         newList.Add(item);
                     }
+                    
                 }
 
                 return newList;
             }
+
             public bool Schnittpunkt(ref Vector2 line1p1,ref Vector2 line1p2,ref Vector2 line2p1,ref Vector2 line2p2, out Vector2 schnittpunkt) 
             {
                 //Console.WriteLine("Schnittpunkt");
