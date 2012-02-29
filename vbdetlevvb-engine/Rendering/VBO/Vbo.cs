@@ -7,34 +7,49 @@ using GL = OpenTK.Graphics.OpenGL.GL;
 namespace vbdetlevvb_engine.Rendering.VBO
 {
     class Vbo {
-        public int vertexBufferID, textureCoordBufferID, normalBufferID, colorBufferID, NumElements;
+        public int vertexBufferID, textureCoordBufferID, normalBufferID, colorBufferID;
         protected int verticesNumber;
         protected BeginMode drawMode = BeginMode.Triangles;
 
+        Logging.Logger log;
+
+        public Vbo(ref Logging.Logger log)
+        {
+            this.log = log;
+        }
+
+        public virtual void OnBeforeRender()
+        {
+        }
+        public virtual void OnRender()
+        {
+        }
+        public virtual void OnAfterRender()
+        {
+        }
+
         public void Draw()
         {
+
             if (vertexBufferID > 0)
             {
+                OnBeforeRender();
                 GL.EnableClientState(ArrayCap.VertexArray);
                 GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBufferID);
                 GL.VertexPointer(3, VertexPointerType.Float, 0, 0);
-                //glVertexPointer(3, GL_FLOAT, 0, 0);
 
                 if (colorBufferID > 0)
                 {
                     GL.EnableClientState(ArrayCap.ColorArray);
                     GL.BindBuffer(BufferTarget.ArrayBuffer, colorBufferID);
                     GL.ColorPointer(4, ColorPointerType.Float, 0, 0);
-                    //glColorPointer(4, GL_FLOAT, 0, 0);
                 }
 
                 if (textureCoordBufferID > 0)
                 {
                     GL.EnableClientState(ArrayCap.TextureCoordArray);
                     GL.BindBuffer(BufferTarget.ArrayBuffer, textureCoordBufferID);
-                    //glColorPointer(2, GL_FLOAT, 0, 0);
                     GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, 0);
-                    
                 }
 
                 if (normalBufferID > 0)
@@ -42,17 +57,19 @@ namespace vbdetlevvb_engine.Rendering.VBO
                     GL.EnableClientState(ArrayCap.NormalArray);
                     GL.BindBuffer(BufferTarget.ArrayBuffer, normalBufferID);
                     GL.NormalPointer(NormalPointerType.Float, 0, 0);
-                    //glNormalPointer(GL_FLOAT, 0, 0);
                 }
 
                 GL.DrawArrays(drawMode, 0, verticesNumber);
-
-                //glDrawRangeElements(drawMode, 0, verticesNumber, verticesNumber, GL_UNSIGNED_INT, 0);
-
+                OnRender();
                 GL.DisableClientState(ArrayCap.VertexArray);
                 GL.DisableClientState(ArrayCap.ColorArray);
                 GL.DisableClientState(ArrayCap.TextureCoordArray);
                 GL.DisableClientState(ArrayCap.NormalArray);
+                OnAfterRender();
+            }
+            else
+            {
+                throw new Exception("VertexBuffer fehlt");
             }
         }
 
@@ -64,7 +81,7 @@ namespace vbdetlevvb_engine.Rendering.VBO
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(vertices.Length * BlittableValueType.StrideOf(vertices)), vertices, BufferUsageHint.StreamDraw);
             GL.GetBufferParameter(BufferTarget.ArrayBuffer, BufferParameterName.BufferSize, out size);
             if (vertices.Length * BlittableValueType.StrideOf(vertices) != size)
-                throw new ApplicationException("Vertex data not uploaded correctly");
+                log.Error("Vertex data not uploaded correctly");
             verticesNumber = vertices.Length;
         }
 
@@ -76,7 +93,7 @@ namespace vbdetlevvb_engine.Rendering.VBO
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(colors.Length * BlittableValueType.StrideOf(colors)), colors, BufferUsageHint.StreamDraw);
             GL.GetBufferParameter(BufferTarget.ArrayBuffer, BufferParameterName.BufferSize, out size);
             if (colors.Length * BlittableValueType.StrideOf(colors) != size)
-                throw new ApplicationException("Vertex data not uploaded correctly");
+                log.Error("Color data not uploaded correctly");
         }
         
         public void BufferTexCoords<TTexCoords>(ref TTexCoords[] vertices) where TTexCoords : struct
@@ -87,7 +104,7 @@ namespace vbdetlevvb_engine.Rendering.VBO
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(vertices.Length * BlittableValueType.StrideOf(vertices)), vertices, BufferUsageHint.StreamDraw);
             GL.GetBufferParameter(BufferTarget.ArrayBuffer, BufferParameterName.BufferSize, out size);
             if (vertices.Length * BlittableValueType.StrideOf(vertices) != size)
-                throw new ApplicationException("Vertex data not uploaded correctly");
+                log.Error("TextureCoords data not uploaded correctly");
         }
        
         public void BufferNormals<TNormals>(ref TNormals[] vertices) where TNormals : struct
@@ -98,10 +115,13 @@ namespace vbdetlevvb_engine.Rendering.VBO
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(vertices.Length * BlittableValueType.StrideOf(vertices)), vertices, BufferUsageHint.StreamDraw);
             GL.GetBufferParameter(BufferTarget.ArrayBuffer, BufferParameterName.BufferSize, out size);
             if (vertices.Length * BlittableValueType.StrideOf(vertices) != size)
-                throw new ApplicationException("Vertex data not uploaded correctly");
+                log.Error("Normal data not uploaded correctly");
         }
 
-
+        public void SetDrawMode(BeginMode mode)
+        {
+            drawMode = mode;
+        }
 
         public void Dispose()
         {
@@ -112,10 +132,7 @@ namespace vbdetlevvb_engine.Rendering.VBO
                 GL.DeleteBuffers(1, ref colorBufferID);
 
             if (textureCoordBufferID > 0)
-                GL.DeleteBuffers(1, ref textureCoordBufferID);
-
-           
-
+                GL.DeleteBuffers(1, ref textureCoordBufferID);  
         }
     
     }

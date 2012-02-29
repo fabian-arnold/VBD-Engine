@@ -10,7 +10,12 @@ namespace vbdetlevvb_engine.Rendering.Mesh
 
         VertexPosition[] vertices = null;
         short[] elements;
-        Vbo vbo = new Vbo();
+        Vbo vbo;
+
+        public Shape(Logging.Logger log)
+        {
+            vbo = new Vbo(ref log);
+        }
 
         public void Load(VertexPosition[] vertices, short[] elements)
         {

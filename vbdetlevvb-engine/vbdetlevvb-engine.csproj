@@ -42,33 +42,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\RederAbleObject.cs" />
     <Compile Include="Rendering\Camera\BasicCamera.cs" />
     <Compile Include="Rendering\Camera\Camera.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rendering\Mesh\StaticMesh.cs" />
-    <Compile Include="Rendering\Mesh\ShapeHelper.cs" />
     <Compile Include="Rendering\Mesh\Shape.cs" />
     <Compile Include="Rendering\Resources\Texture.cs" />
     <Compile Include="Rendering\Resources\Resourcesloader.cs" />
     <Compile Include="Rendering\Terrain\clipper.cs" />
     <Compile Include="Rendering\Terrain\Terrain.cs" />
+    <Compile Include="Rendering\Terrain\Terrainnew.cs" />
     <Compile Include="Rendering\VBO\Vbo.cs" />
     <Compile Include="Rendering\Mesh\VertexPosition.cs" />
     <Compile Include="Window.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Rendering\Terrain\TextFile1.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Desktop\SRC\GeometryUtility\GeometryUtility.csproj">
-      <Project>{fd47d6ac-8238-4975-91c8-51e88326f27f}</Project>
-      <Name>GeometryUtility</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\Desktop\SRC\PolygonCuttingEar\PolygonCuttingEar.csproj">
-      <Project>{baa6d355-c95d-4714-8989-d9891efc5db6}</Project>
-      <Name>PolygonCuttingEar</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

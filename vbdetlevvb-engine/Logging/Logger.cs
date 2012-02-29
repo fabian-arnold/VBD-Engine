@@ -25,6 +25,15 @@ namespace vbdetlevvb_engine.Logging
             
         }
 
+        public void Update()
+        {
+            if ((System.DateTime.Now - lasttime) > TimeSpan.FromSeconds(59))
+            {
+                WriteLine("Time: " + System.DateTime.Now);
+                UpdateLasttime();
+            }
+        }
+
         private void UpdateLasttime()
         {
             lasttime = System.DateTime.Now.AddSeconds(-System.DateTime.Now.Second);
@@ -39,11 +48,7 @@ namespace vbdetlevvb_engine.Logging
 
         public void Log(string tag, string txt)
         {
-            if ((System.DateTime.Now - lasttime) > TimeSpan.FromSeconds(59))
-            {
-                WriteLine("Time: " + System.DateTime.Now);
-                UpdateLasttime();
-            }
+            
             string l = System.DateTime.Now.Second + "(" + tag + "): " + txt;
             WriteLine(l);
         }
@@ -58,5 +63,13 @@ namespace vbdetlevvb_engine.Logging
             Log("", txt);
         }
 
+
+        public void Error(string p)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Beep();
+            Log("Fatal Error", p);           
+            Environment.Exit(0);
+        }
     }
 }

@@ -16,10 +16,11 @@ namespace vbdetlevvb_engine.Rendering.Mesh
         VertexPosition[] vertices;
         short[] elements;
         Vector2[][] triangles;
-        Vbo vbo = new Vbo();
+        Vbo vbo;
 
-        public StaticMesh()
+        public StaticMesh(Logging.Logger log)
         {
+            vbo = new Vbo(ref log);
         } 
         
         public virtual void Load( Vector2[][] triangles)

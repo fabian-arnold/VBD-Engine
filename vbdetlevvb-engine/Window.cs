@@ -26,12 +26,12 @@ namespace vbdetlevvb_engine
     
     public class Window : GameWindow
     {
-        private bool wireframe = false;
+        private bool wireframe = true;
         public Rendering.Camera.Camera camera;
 
 
         //Shape testquad;
-        Terrain terrain;
+        Terrainnew terrain;
         public Logger logger;
         public delegate void ChangedEventHandler(Window sender);
         public event ChangedEventHandler update;
@@ -40,7 +40,7 @@ namespace vbdetlevvb_engine
         {
             logger = new Logger(this);
             camera = new BasicCamera(this);
-            terrain = new Terrain(this);
+            terrain = new Terrainnew(this);
             
             
         }
@@ -48,7 +48,7 @@ namespace vbdetlevvb_engine
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            terrain.Load();
+            terrain.OnLoad();
             camera.OnLoad(Height, Width);
             string version = GL.GetString(StringName.Version);
             int major = (int)version[0];
@@ -82,11 +82,13 @@ namespace vbdetlevvb_engine
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
             base.OnUpdateFrame(e);
-
+            logger.Update();
+            terrain.OnUpdate();
             Title = "FPS: " + (1 / e.Time).ToString("0");
             if (Keyboard[OpenTK.Input.Key.Escape])
                 this.Exit();
 
+            
 
             
         }
@@ -95,8 +97,8 @@ namespace vbdetlevvb_engine
         {
             if (e.Key == OpenTK.Input.Key.F3)
             {
-                this.wireframe = !wireframe;
-                Console.WriteLine("Toggle Wireframe: " + wireframe);
+                //this.wireframe = !wireframe;
+                //Console.WriteLine("Toggle Wireframe: " + wireframe);
             } 
             
         }
@@ -121,11 +123,18 @@ namespace vbdetlevvb_engine
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref lookat);
 
-            terrain.Draw();
+            terrain.OnRender();
 
             
 
             SwapBuffers();
         }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            terrain.OnDispose();
+        }
+
     }
 }

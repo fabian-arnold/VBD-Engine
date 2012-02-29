@@ -11,6 +11,7 @@ using Polygon = System.Collections.Generic.List<ClipperLib.IntPoint>;
 using Polygons = System.Collections.Generic.List<System.Collections.Generic.List<ClipperLib.IntPoint>>;
 using GeometryUtility;
 using PolygonCuttingEar;
+using ClipperLib;
 
 namespace vbdetlevvb_engine.Rendering.Terrain
 {
@@ -37,8 +38,8 @@ namespace vbdetlevvb_engine.Rendering.Terrain
                 this.window = window;
                 window.Mouse.ButtonDown += MouseDown;
                 window.Mouse.ButtonUp += MouseUp;
-                brush = new StaticMesh();
-                terrain = new Vbo();
+                brush = new StaticMesh(window.logger);
+                terrain = new Vbo(ref window.logger);
             
             }
             public void Load()
