@@ -68,11 +68,6 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GeometryUtility\GeometryUtility.csproj">
-      <Name>GeometryUtility</Name>
-      <Project>{FD47D6AC-8238-4975-91C8-51E88326F27F}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -90,6 +85,12 @@
     <Compile Include="CPolygonShape.cs">
       <SubType>Code</SubType>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GeometryUtility\GeometryUtility.csproj">
+      <Project>{fd47d6ac-8238-4975-91c8-51e88326f27f}</Project>
+      <Name>GeometryUtility</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

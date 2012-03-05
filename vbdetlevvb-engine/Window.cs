@@ -84,7 +84,7 @@ namespace vbdetlevvb_engine
             base.OnUpdateFrame(e);
             logger.Update();
             terrain.OnUpdate();
-            Title = "FPS: " + (1 / e.Time).ToString("0");
+            Title = "FPS: " + this.RenderFrequency;
             if (Keyboard[OpenTK.Input.Key.Escape])
                 this.Exit();
 
@@ -97,8 +97,8 @@ namespace vbdetlevvb_engine
         {
             if (e.Key == OpenTK.Input.Key.F3)
             {
-                //this.wireframe = !wireframe;
-                //Console.WriteLine("Toggle Wireframe: " + wireframe);
+                this.wireframe = !wireframe;
+                Console.WriteLine("Toggle Wireframe: " + wireframe);
             } 
             
         }

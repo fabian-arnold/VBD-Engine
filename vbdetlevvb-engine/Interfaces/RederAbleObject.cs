@@ -4,7 +4,7 @@ using System.Text;
 
 namespace vbdetlevvb_engine.Interfaces
 {
-    interface RederAbleObject
+    interface RenderAbleObject
     {
         void OnRender();
         void OnUpdate();

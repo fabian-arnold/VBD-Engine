@@ -29,6 +29,7 @@ namespace vbdetlevvb_engine.Rendering.Mesh
             Color = ToRgba(color);
         }
 
+       
         static uint ToRgba(Color color)
         {
             return (uint)color.A << 24 | (uint)color.B << 16 | (uint)color.G << 8 | (uint)color.R;
@@ -47,6 +48,12 @@ namespace vbdetlevvb_engine.Rendering.Mesh
         {
             Position = pos;
         }
+
+        public double[] ToDoubleArray()
+        {
+            return new double[]{(double)Position.X, (double)Position.Y, (double)Position.Z};
+        }
+
 
         public VertexPosition(OpenTK.Vector2 pos)
         {

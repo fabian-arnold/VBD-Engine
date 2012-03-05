@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using vbdetlevvb_engine.Interfaces;
 using GL = OpenTK.Graphics.OpenGL.GL;
 namespace vbdetlevvb_engine.Rendering.VBO
 {
-    class Vbo {
+    class Vbo : RenderAbleObject
+    {
         public int vertexBufferID, textureCoordBufferID, normalBufferID, colorBufferID;
         protected int verticesNumber;
         protected BeginMode drawMode = BeginMode.Triangles;
@@ -18,12 +20,19 @@ namespace vbdetlevvb_engine.Rendering.VBO
             this.log = log;
         }
 
+        public virtual void OnLoad(){
+        }
+
         public virtual void OnBeforeRender()
         {
         }
         public virtual void OnRender()
         {
         }
+
+        public virtual void OnUpdate(){
+        }
+
         public virtual void OnAfterRender()
         {
         }
@@ -123,7 +132,7 @@ namespace vbdetlevvb_engine.Rendering.VBO
             drawMode = mode;
         }
 
-        public void Dispose()
+        public void OnDispose()
         {
             if (vertexBufferID > 0) 
                 GL.DeleteBuffers(1, ref vertexBufferID);
