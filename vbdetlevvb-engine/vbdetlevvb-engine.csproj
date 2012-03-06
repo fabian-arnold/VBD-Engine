@@ -59,7 +59,7 @@
     <Compile Include="Rendering\Mesh\ConcaveTriangulator.cs" />
     <Compile Include="Rendering\Mesh\StaticMesh.cs" />
     <Compile Include="Rendering\Mesh\Shape.cs" />
-    <Compile Include="Rendering\Mesh\Polygon.cs" />
+    <Compile Include="Rendering\Mesh\ChunkDrawer.cs" />
     <Compile Include="Rendering\Resources\Resourcesloader.cs" />
     <Compile Include="Rendering\Terrain\clipper.cs" />
     <Compile Include="Rendering\Terrain\Terrainnew.cs" />

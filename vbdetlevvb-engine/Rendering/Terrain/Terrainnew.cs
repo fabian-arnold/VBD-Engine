@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Text;
 using ClipperLib;
 using OpenTK;
@@ -11,7 +13,7 @@ using ClippingPolygon = System.Collections.Generic.List<ClipperLib.IntPoint>;
 using ClippingPolygons = System.Collections.Generic.List<System.Collections.Generic.List<ClipperLib.IntPoint>>;
 namespace vbdetlevvb_engine.Rendering.Terrain
 {
-    class Terrainnew: Polygon
+    class Terrainnew: ChunkDrawer
         
     {
 
@@ -26,29 +28,68 @@ namespace vbdetlevvb_engine.Rendering.Terrain
             log = window.logger;
             camera = (vbdetlevvb_engine.Rendering.Camera.BasicCamera)window.camera;
             this.window = window;
+            window.Mouse.ButtonDown += new EventHandler<MouseButtonEventArgs>(Mouse_ButtonDown);
+            window.Mouse.ButtonUp += new EventHandler<MouseButtonEventArgs>(Mouse_ButtonUp);
+        }
+        bool Erase = false;
+        void Mouse_ButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (e.Button == MouseButton.Left)
+            {
+                Erase = false;
+            }
+        }
 
+        void Mouse_ButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.Button == MouseButton.Left)
+            {
+                Erase = true;
+            }
         }
 
         public void OnUpdate()
         {
+            if (Erase)
+            {
+                Vector2 mouse = new Vector2(window.Mouse.X, window.ClientRectangle.Height - window.Mouse.Y);
+                mouse *= 1 / (camera.zoom / 100f);
+                mouse /= 100;
+                Vector2 pos = camera.pos;
+                Vector2.Add(ref mouse, ref pos, out mouse);
 
-            Vector2 mouse = new Vector2(window.Mouse.X, window.ClientRectangle.Height - window.Mouse.Y);
-            mouse *= 1 / (camera.zoom / 100f);
-            mouse /= 100;
-            Vector2 pos = camera.pos;
-            Vector2.Add(ref mouse, ref pos, out mouse);
-            
-            DoCircleClipping(mouse, 1);
-            
+                DoCircleClipping(mouse, 0.25f);
+            }
         }
-        
+        Bitmap bitmap = new Bitmap("data/Textures/dirt.png");
+
         public void OnLoad()
         {
+
+            GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
+
+            GL.GenTextures(1, out texture);
+            GL.BindTexture(TextureTarget.Texture2D, texture);
+
+            BitmapData data = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height),
+                ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, data.Width, data.Height, 0,
+                OpenTK.Graphics.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
+
+           
+            bitmap.UnlockBits(data);
+
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+
+
            // SetDrawMode(OpenTK.Graphics.OpenGL.BeginMode.Triangles);
             shape = new VertexPosition[4];
-            shape[0] = new VertexPosition(0,0,0);
+            shape[0] = new VertexPosition(10, 10, 0);
             shape[1] = new VertexPosition(10, 0, 0);
-            shape[2] = new VertexPosition(10, 10, 0);
+            shape[2] = new VertexPosition(0, 0, 0);
+            
             shape[3] = new VertexPosition(0, 10, 0);
             BufferVertices(ref shape);
         }
@@ -81,11 +122,14 @@ namespace vbdetlevvb_engine.Rendering.Terrain
                 
                 for (int f = 0; f < solution.Count; f++)
                 {
-                   
-                    shape = new VertexPosition[solution[f].Count];
-                    for(int i = 0; i < solution[f].Count; i++){
-                  
-                        shape[i] = new VertexPosition(solution[f][i].X / accuracy, solution[f][i].Y / accuracy, 0);
+                    if (f == 0)
+                    {
+                        shape = new VertexPosition[solution[f].Count];
+                        for (int i = 0; i < solution[f].Count; i++)
+                        {
+
+                            shape[i] = new VertexPosition(solution[f][i].X / accuracy, solution[f][i].Y / accuracy, 0);
+                        }
                     }
                     
                 }
@@ -93,7 +137,7 @@ namespace vbdetlevvb_engine.Rendering.Terrain
             BufferVertices(ref shape);
         }
 
-        public void OnRender()
+        public  void OnRender()
         {
             //IntPtr tess = Glu.NewTess();
             //Glu.TessCallback(tess, TessCallback.TessBegin, 
@@ -105,6 +149,8 @@ namespace vbdetlevvb_engine.Rendering.Terrain
 
         public void OnDispose()
         {
+            GL.DeleteTextures(1, ref texture);
+
             OnDispose();
         }
 

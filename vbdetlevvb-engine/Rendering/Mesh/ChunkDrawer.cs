@@ -8,12 +8,12 @@ using GL = OpenTK.Graphics.OpenGL.GL;
 using OpenTK.Graphics.OpenGL;
 namespace vbdetlevvb_engine.Rendering.Mesh
 {
-    class Polygon: Interfaces.RenderAbleObject
+    class ChunkDrawer: Interfaces.RenderAbleObject
     {
 
         Logging.Logger log;
 
-        public Polygon(ref Logging.Logger log)
+        public ChunkDrawer(ref Logging.Logger log)
         {
             this.log = log;
            
@@ -30,20 +30,25 @@ namespace vbdetlevvb_engine.Rendering.Mesh
             }
             
 
-            log.Log("Triangluation", ""+ConcaveTriangulator.Triangulate(value, new int[] { value.Length }));
+            ConcaveTriangulator.Triangulate(value, new int[] { value.Length }, ref log);
            
             this.vertices = vertices;
             this.indices = ConcaveTriangulator.Indices.ToArray();
         }
 
-
+        protected int texture;
         public virtual void OnUpdate() { }
         public virtual void OnDraw() 
         {
             GL.Begin(BeginMode.Triangles);
+            GL.BindTexture(TextureTarget.Texture2D, texture);
             foreach (int index in indices)
             {
                 GL.Vertex3(new float[] { vertices[index].Position.X, vertices[index].Position.Y, vertices[index].Position.Z });
+                GL.TexCoord2(((double)vertices[index].Position.X) / 10, ((double)vertices[index].Position.Y) / 10);
+                
+                //log.Log("X",vertices[index].Position.X +" Y:"+ vertices[index].Position.Y);
+               
             }
             GL.End();
         }

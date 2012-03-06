@@ -38,7 +38,7 @@ namespace vbdetlevvb_engine.Rendering.Mesh
         //
         //Returns true on successfull triangulation, false on failure or error
         //
-        unsafe static public bool Triangulate(Vector2[] Input, int[] VertsPerContour)
+        unsafe static public bool Triangulate(Vector2[] Input, int[] VertsPerContour, ref Logging.Logger log)
         {
             InvalidPolygon = false;
             Indices = new List<int>();
@@ -118,14 +118,20 @@ namespace vbdetlevvb_engine.Rendering.Mesh
             }
             else
             {
-                // end polygon
-                Glu.TessEndPolygon(tess);
- 
-                // destroy the tessellation object
-                Glu.DeleteTess(tess);
-                tess = IntPtr.Zero;
- 
-                //The Indices object is now valid.
+                try
+                {
+                    // end polygon
+                    Glu.TessEndPolygon(tess);
+
+                    // destroy the tessellation object
+                    Glu.DeleteTess(tess);
+                    tess = IntPtr.Zero;
+
+                    //The Indices object is now valid.
+                }
+                catch {
+                    log.Warning("Triangulator", "Failed to delete tesslator");
+                }
                 return true;
             }
         }

@@ -52,6 +52,14 @@ namespace vbdetlevvb_engine.Logging
             string l = System.DateTime.Now.Second + "(" + tag + "): " + txt;
             WriteLine(l);
         }
+        public void Warning(string tag, string txt)
+        {
+            ConsoleColor col = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            string l = System.DateTime.Now.Second + "(" + tag + "): " + txt;
+            WriteLine("Warning: "+l);
+            Console.ForegroundColor = col;
+        }
 
         private void WriteLine(string l)
         {
