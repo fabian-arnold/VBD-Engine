@@ -31,7 +31,7 @@ namespace vbdetlevvb_engine
 
 
         //Shape testquad;
-        Chunk terrain;
+        Terrainnew terrain;
         public Logger logger;
         public delegate void ChangedEventHandler(Window sender);
         public event ChangedEventHandler update;
@@ -40,7 +40,7 @@ namespace vbdetlevvb_engine
         {
             logger = new Logger(this);
             camera = new BasicCamera(this);
-            terrain = new Chunk(this, Vector2.Zero);
+            terrain = new Terrainnew(this);
             
             
         }

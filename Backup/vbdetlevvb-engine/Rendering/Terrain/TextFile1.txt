@@ -1,0 +1,144 @@
+﻿ private void SubtractSphere()
+            {
+                BasicCamera camera = ((BasicCamera)(this.window.camera));
+                List<Vector2[]> trianglesnew = new List<Vector2[]>();
+                Vector2 mouse = new Vector2(window.Mouse.X, window.ClientRectangle.Height - window.Mouse.Y);
+                mouse *= 1/( camera.zoom / 100f);
+
+                Vector2 pos = camera.pos*100;
+                Vector2.Add(ref mouse, ref pos, out mouse);
+                
+
+                for (int i = 0; i < (triangles.Length); i++)
+                {
+                    //1. Schritt überprüfen ob das 3eck von der subtraction betroffen ist
+
+
+                    Vector2 p1 = triangles[i][0];   //Das 3eck von dem abgezogen wird
+                    Vector2 p2 = triangles[i][1];   //       
+                    Vector2 p3 = triangles[i][2];   //
+                    
+                    
+
+                    /*
+                     * Notiz:
+                     * Erste schleife(int i) Das Mesh von dem abgezogen werden muss
+                     * 2te schleife (int a) Das Mesh das abgezogen wird.
+                     */
+                    bool contractbrush = false; 
+                    List<Vector2> newpoints = new List<Vector2>();
+                    for (int a = 0; a < brushtriangles.Length; a++)
+                    {
+                        Vector2 brushP1, brushP2, brushP3;
+                        brushP1 = brushtriangles[a][0];
+                        brushP2 = brushtriangles[a][1];
+                        brushP3 = brushtriangles[a][2];
+                        /*
+                         * Jetzt überprüfen ob die punkte p1-3 im brushtriangle liegen
+                         */
+                        bool p1in, p2in, p3in;
+                        p1in = isPointInTriangle(ref brushP1, ref brushP2, ref brushP3, ref p1);
+                        p2in = isPointInTriangle(ref brushP1, ref brushP2, ref brushP3, ref p2);
+                        p3in = isPointInTriangle(ref brushP1, ref brushP2, ref brushP3, ref p3);
+
+
+                        /*
+                         * Die punkte die nicht im Brush liegen zur pointlist hinzufügen
+                         */
+                        if (!p1in) newpoints.Add(p1);
+
+                        if (!p2in) newpoints.Add(p2);
+
+                        if (!p3in) newpoints.Add(p3);
+                        //Console.WriteLine("P3: "+p3in+" P2: "+p2in+" P1: "+p1in);
+                        /*
+                         * Die Schnittpunkte des Brushtriangles mit dem Terraintriangle hinzufügen
+                         */
+                        if (p1in || p2in || p3in)
+                        {
+                            Vector2 p;
+                            if (Schnittpunkt(ref p1, ref p2, ref brushP1, ref brushP2, out p))
+                            {
+                                newpoints.Add(p);
+                            }
+
+                            if (Schnittpunkt(ref p2, ref p3, ref brushP1, ref brushP2, out p))
+                            {
+                                newpoints.Add(p);
+                            }
+                            if (Schnittpunkt(ref p3, ref p1, ref brushP1, ref brushP2, out p))
+                            {
+                                newpoints.Add(p);
+                            }
+
+                            if (Schnittpunkt(ref p1, ref p2, ref brushP2, ref brushP3, out p))
+                            {
+                                newpoints.Add(p);
+                            }
+                            if (Schnittpunkt(ref p2, ref p3, ref brushP2, ref brushP3, out p))
+                            {
+                                newpoints.Add(p);
+                            }
+                            if (Schnittpunkt(ref p3, ref p1, ref brushP2, ref brushP3, out p))
+                            {
+                                newpoints.Add(p);
+                            }
+
+                            if (Schnittpunkt(ref p1, ref p2, ref brushP1, ref brushP3, out p))
+                            {
+                                newpoints.Add(p);
+                            }
+                            if (Schnittpunkt(ref p2, ref p3, ref brushP1, ref brushP3, out p))
+                            {
+                                newpoints.Add(p);
+                            }
+                            if (Schnittpunkt(ref p3, ref p1, ref brushP1, ref brushP3, out p))
+                            {
+                                newpoints.Add(p);
+                            }
+                        }
+                    }
+
+                    newpoints = RemoveDoubleItems<Vector2>(ref newpoints);
+
+                   
+                    int nVertices = newpoints.Count;
+                    if (nVertices <= 0)
+                        return;
+
+                    CPoint2D[] vertices = new CPoint2D[nVertices];
+                    for (int e = 0; e < nVertices; e++)
+                    {
+                        window.logger.Log(""+newpoints[e]);
+                        vertices[e] = new CPoint2D(newpoints[e].X, newpoints[e].Y);
+                    }
+                    Console.WriteLine();
+                    CPolygonShape cutPolygon = new CPolygonShape(vertices);
+                    try
+                    {
+                        cutPolygon.CutEar();
+                    }
+                    catch { }
+                    
+                    if(cutPolygon.NumberOfPolygons>1)
+                        Console.WriteLine(cutPolygon.NumberOfPolygons);
+
+
+                    for (int s = 0; s < cutPolygon.NumberOfPolygons; s++)
+                    {
+                       
+                        Vector2[] tempArray = new Vector2[3];
+
+                        for (int j = 0; j < 3; j++)
+                        {
+                            tempArray[j].X = (float)cutPolygon.Polygons(s)[j].X;
+                            tempArray[j].Y = (float)cutPolygon.Polygons(s)[j].Y;
+                        }
+
+                        trianglesnew.Add(tempArray);
+            
+                    }
+                }
+                triangles = trianglesnew.ToArray();
+                
+            }

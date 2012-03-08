@@ -62,8 +62,7 @@
     <Compile Include="Rendering\Mesh\ChunkDrawer.cs" />
     <Compile Include="Rendering\Resources\Resourcesloader.cs" />
     <Compile Include="Rendering\Terrain\clipper.cs" />
-    <Compile Include="Rendering\Terrain\Chunk.cs" />
-    <Compile Include="Rendering\Terrain\World.cs" />
+    <Compile Include="Rendering\Terrain\Terrainnew.cs" />
     <Compile Include="Rendering\VBO\Vbo.cs" />
     <Compile Include="Rendering\Mesh\VertexPosition.cs" />
     <Compile Include="Window.cs" />

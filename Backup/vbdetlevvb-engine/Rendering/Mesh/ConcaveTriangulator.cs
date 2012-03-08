@@ -130,7 +130,6 @@ namespace vbdetlevvb_engine.Rendering.Mesh
                     //The Indices object is now valid.
                 }
                 catch {
-                    InvalidPolygon = true;
                     log.Warning("Triangulator", "Failed to delete tesslator");
                 }
                 return true;

@@ -1,9 +1,12 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
+Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual C# Express 2010
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6057E0A4-6E85-48CE-B3B7-FD6030CC7458}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "vbdetlevvb-engine", "vbdetlevvb-engine\vbdetlevvb-engine.csproj", "{BC714749-6AE9-4446-A605-E2B28835DD99}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6057E0A4-6E85-48CE-B3B7-FD6030CC7458}"
+	ProjectSection(SolutionItems) = preProject
+		Performance1.psess = Performance1.psess
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingApplication", "TestingApplication\TestingApplication.csproj", "{6173C682-BF54-431D-8934-5433DF1ACE9B}"
 EndProject

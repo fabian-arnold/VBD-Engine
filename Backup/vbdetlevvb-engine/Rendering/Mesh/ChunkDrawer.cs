@@ -28,14 +28,12 @@ namespace vbdetlevvb_engine.Rendering.Mesh
             {
                 value[i] = new Vector2(vertices[i].Position.X,vertices[i].Position.Y); 
             }
+            
 
-
-            if( ConcaveTriangulator.Triangulate( value, new int[] { value.Length }, ref log ) )
-            {
-
-                this.vertices = vertices;
-                this.indices = ConcaveTriangulator.Indices.ToArray();
-            }
+            ConcaveTriangulator.Triangulate(value, new int[] { value.Length }, ref log);
+           
+            this.vertices = vertices;
+            this.indices = ConcaveTriangulator.Indices.ToArray();
         }
 
         protected int texture;
@@ -46,13 +44,13 @@ namespace vbdetlevvb_engine.Rendering.Mesh
             GL.BindTexture(TextureTarget.Texture2D, texture);
             foreach (int index in indices)
             {
-                GL.TexCoord2(((double)vertices[index].Position.X), ((double)vertices[index].Position.Y));
                 GL.Vertex3(new float[] { vertices[index].Position.X, vertices[index].Position.Y, vertices[index].Position.Z });
+                GL.TexCoord2(((double)vertices[index].Position.X) / 10, ((double)vertices[index].Position.Y) / 10);
+                
                 //log.Log("X",vertices[index].Position.X +" Y:"+ vertices[index].Position.Y);
                
             }
             GL.End();
-            log.Log( "PolygonInfo", ""+indices.Length );
         }
         public virtual void OnDispose() { }
         public virtual void OnRender() { }
