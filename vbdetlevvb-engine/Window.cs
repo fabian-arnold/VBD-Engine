@@ -26,21 +26,24 @@ namespace vbdetlevvb_engine
     
     public class Window : GameWindow
     {
-        private bool wireframe = true;
+        private bool wireframe = false;
         public Rendering.Camera.Camera camera;
 
 
         //Shape testquad;
-        Chunk terrain;
+        World terrain;
         public Logger logger;
         public delegate void ChangedEventHandler(Window sender);
         public event ChangedEventHandler update;
 
+        public Physic.PhysicManager phyMgr;
+
         public Window() : base(800, 600)
         {
             logger = new Logger(this);
+            phyMgr = new Physic.PhysicManager();
             camera = new BasicCamera(this);
-            terrain = new Chunk(this, Vector2.Zero);
+            terrain = new World(this);
             
             
         }
@@ -84,7 +87,7 @@ namespace vbdetlevvb_engine
             base.OnUpdateFrame(e);
             logger.Update();
             terrain.OnUpdate();
-            Title = "FPS: " + this.RenderFrequency;
+            Title = "FPS: " + this.RenderFrequency.ToString("0.");
             if (Keyboard[OpenTK.Input.Key.Escape])
                 this.Exit();
 

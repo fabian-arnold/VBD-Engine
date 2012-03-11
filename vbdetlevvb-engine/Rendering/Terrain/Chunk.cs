@@ -22,12 +22,13 @@ namespace vbdetlevvb_engine.Rendering.Terrain
         vbdetlevvb_engine.Rendering.Camera.BasicCamera camera;
         Window window;
 
-        public Chunk(Window window, Vector2 position): 
+        public Chunk(ref Window window, Vector2 position): 
             base(ref window.logger)
         {
             log = window.logger;
             camera = (vbdetlevvb_engine.Rendering.Camera.BasicCamera)window.camera;
             this.window = window;
+            ChunkPosition = position;
             window.Mouse.ButtonDown += new EventHandler<MouseButtonEventArgs>(Mouse_ButtonDown);
             window.Mouse.ButtonUp += new EventHandler<MouseButtonEventArgs>(Mouse_ButtonUp);
         }

@@ -22,7 +22,7 @@ namespace vbdetlevvb_engine.Rendering.Camera
         }
         Matrix4 perpective;
         Matrix4 lookat;
-        public Vector2 pos;
+        public Vector2 pos = new Vector2(254*3,254*3);
         Vector2 movement;
         float speed= 10;
         public override void DoResize(int Height, int Width)

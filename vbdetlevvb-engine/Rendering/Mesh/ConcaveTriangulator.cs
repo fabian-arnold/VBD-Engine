@@ -132,6 +132,7 @@ namespace vbdetlevvb_engine.Rendering.Mesh
                 catch {
                     InvalidPolygon = true;
                     log.Warning("Triangulator", "Failed to delete tesslator");
+                    return false;
                 }
                 return true;
             }

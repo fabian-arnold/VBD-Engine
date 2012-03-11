@@ -51,10 +51,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interfaces\RederAbleObject.cs" />
+    <Compile Include="Physic\OpenGLDebugDraw.cs" />
+    <Compile Include="Physic\PhysicManager.cs" />
+    <Compile Include="Utils\Interfaces\RederAbleObject.cs" />
     <Compile Include="Rendering\Camera\BasicCamera.cs" />
     <Compile Include="Rendering\Camera\Camera.cs" />
-    <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Utils\Logging\Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rendering\Mesh\ConcaveTriangulator.cs" />
     <Compile Include="Rendering\Mesh\StaticMesh.cs" />
@@ -69,10 +71,16 @@
     <Compile Include="Window.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Rendering\Terrain\TextFile1.txt" />
+    <None Include="lib\Box2DX.dll" />
   </ItemGroup>
   <ItemGroup>
     <None Include="vbdetlevvb.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Box2DX\Box2DX.csproj">
+      <Project>{c157bca5-bac7-455f-a7de-59d506d46ecf}</Project>
+      <Name>Box2DX</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

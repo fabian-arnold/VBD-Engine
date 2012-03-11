@@ -52,7 +52,7 @@ namespace vbdetlevvb_engine.Rendering.Mesh
                
             }
             GL.End();
-            log.Log( "PolygonInfo", ""+indices.Length );
+            
         }
         public virtual void OnDispose() { }
         public virtual void OnRender() { }
