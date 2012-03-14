@@ -37,21 +37,33 @@ namespace vbdetlevvb_engine.Rendering.Mesh
                 this.indices = ConcaveTriangulator.Indices.ToArray();
             }
         }
+        public void BufferVertices(VertexPosition[] vertices)
+        {
+            BufferVertices(ref vertices);
+            
+        }
 
         protected int texture;
         public virtual void OnUpdate() { }
         public virtual void OnDraw() 
         {
-            GL.Begin(BeginMode.Triangles);
-            GL.BindTexture(TextureTarget.Texture2D, texture);
-            foreach (int index in indices)
+            if (indices != null)
             {
-                GL.TexCoord2(((double)vertices[index].Position.X), ((double)vertices[index].Position.Y));
-                GL.Vertex3(new float[] { vertices[index].Position.X, vertices[index].Position.Y, vertices[index].Position.Z });
-                //log.Log("X",vertices[index].Position.X +" Y:"+ vertices[index].Position.Y);
-               
+                GL.Begin(BeginMode.Triangles);
+                GL.BindTexture(TextureTarget.Texture2D, texture);
+                foreach (int index in indices)
+                {
+                    GL.TexCoord2(((double)vertices[index].Position.X), ((double)vertices[index].Position.Y));
+                    GL.Vertex3(new float[] { vertices[index].Position.X, vertices[index].Position.Y, vertices[index].Position.Z });
+                    //log.Log("X",vertices[index].Position.X +" Y:"+ vertices[index].Position.Y);
+
+                }
+                GL.End();
             }
-            GL.End();
+            else
+            {
+                
+            }
             
         }
         public virtual void OnDispose() { }

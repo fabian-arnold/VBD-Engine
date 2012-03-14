@@ -1,0 +1,19 @@
+File,LOC,SLOC-P,SLOC-L,MVG,BLOC,C&SLOC,CLOC,CWORD,HCLOC,HCWORD
+C:\Users\Adroid\Documents\Visual Studio 2010\Projects\vbdetlevvb-engine\vbdetlevvb-engine\Window.cs,144,102,74,4,40,0,2,3,0,0
+C:\Users\Adroid\Documents\Visual Studio 2010\Projects\vbdetlevvb-engine\vbdetlevvb-engine\Physic\OpenGLDebugDraw.cs,230,149,112,6,27,0,54,147,0,0
+C:\Users\Adroid\Documents\Visual Studio 2010\Projects\vbdetlevvb-engine\vbdetlevvb-engine\Physic\PhysicManager.cs,92,44,33,0,32,0,16,128,0,0
+C:\Users\Adroid\Documents\Visual Studio 2010\Projects\vbdetlevvb-engine\vbdetlevvb-engine\Properties\AssemblyInfo.cs,37,15,3,0,5,0,17,120,0,0
+C:\Users\Adroid\Documents\Visual Studio 2010\Projects\vbdetlevvb-engine\vbdetlevvb-engine\Rendering\Camera\BasicCamera.cs,103,92,55,10,7,2,4,25,0,0
+C:\Users\Adroid\Documents\Visual Studio 2010\Projects\vbdetlevvb-engine\vbdetlevvb-engine\Rendering\Camera\Camera.cs,23,15,11,0,8,0,0,0,0,0
+C:\Users\Adroid\Documents\Visual Studio 2010\Projects\vbdetlevvb-engine\vbdetlevvb-engine\Rendering\Mesh\ChunkDrawer.cs,76,60,40,4,15,0,1,4,0,0
+C:\Users\Adroid\Documents\Visual Studio 2010\Projects\vbdetlevvb-engine\vbdetlevvb-engine\Rendering\Mesh\ConcaveTriangulator.cs,183,122,79,12,31,2,30,213,0,0
+C:\Users\Adroid\Documents\Visual Studio 2010\Projects\vbdetlevvb-engine\vbdetlevvb-engine\Rendering\Mesh\Shape.cs,38,29,17,0,7,0,2,7,0,0
+C:\Users\Adroid\Documents\Visual Studio 2010\Projects\vbdetlevvb-engine\vbdetlevvb-engine\Rendering\Mesh\StaticMesh.cs,80,58,40,2,21,0,1,6,0,0
+C:\Users\Adroid\Documents\Visual Studio 2010\Projects\vbdetlevvb-engine\vbdetlevvb-engine\Rendering\Mesh\VertexPosition.cs,83,64,37,2,18,0,1,1,0,0
+C:\Users\Adroid\Documents\Visual Studio 2010\Projects\vbdetlevvb-engine\vbdetlevvb-engine\Rendering\Resources\Resourcesloader.cs,15,12,8,0,3,0,0,0,0,0
+C:\Users\Adroid\Documents\Visual Studio 2010\Projects\vbdetlevvb-engine\vbdetlevvb-engine\Rendering\Terrain\Chunk.cs,178,142,98,11,31,0,5,9,0,0
+C:\Users\Adroid\Documents\Visual Studio 2010\Projects\vbdetlevvb-engine\vbdetlevvb-engine\Rendering\Terrain\clipper.cs,3597,2956,1890,529,293,29,348,1773,0,1
+C:\Users\Adroid\Documents\Visual Studio 2010\Projects\vbdetlevvb-engine\vbdetlevvb-engine\Rendering\Terrain\World.cs,85,66,37,10,11,0,8,22,0,0
+C:\Users\Adroid\Documents\Visual Studio 2010\Projects\vbdetlevvb-engine\vbdetlevvb-engine\Rendering\VBO\Vbo.cs,149,127,82,11,22,0,0,0,0,0
+C:\Users\Adroid\Documents\Visual Studio 2010\Projects\vbdetlevvb-engine\vbdetlevvb-engine\Utils\Interfaces\RederAbleObject.cs,16,13,9,0,3,0,0,0,0,0
+C:\Users\Adroid\Documents\Visual Studio 2010\Projects\vbdetlevvb-engine\vbdetlevvb-engine\Utils\Logging\Logger.cs,84,71,49,1,13,0,0,0,0,0
