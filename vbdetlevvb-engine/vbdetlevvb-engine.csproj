@@ -41,6 +41,10 @@
     <AssemblyOriginatorKeyFile>vbdetlevvb.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Box2DX, Version=2.0.1.34967, Culture=neutral, PublicKeyToken=5786bcbbd96947f7, processorArchitecture=x86">
+      <HintPath>lib\Box2DX.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
     <Reference Include="OpenTK, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL" />
     <Reference Include="OpenTK.Compatibility, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL" />
     <Reference Include="OpenTK.GLControl, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL" />
@@ -75,12 +79,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="vbdetlevvb.pfx" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Box2DX\Box2DX.csproj">
-      <Project>{c157bca5-bac7-455f-a7de-59d506d46ecf}</Project>
-      <Name>Box2DX</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
